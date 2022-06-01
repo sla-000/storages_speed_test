@@ -113,7 +113,7 @@ class _MyHomePageState extends State<MyHomePage> {
             _isBusy = false;
           });
 
-          di<TableData>().add(
+          di<TableData>().addData(
             di<Settings>().state.storage,
             MeasurementDto(
               fill: fillTime.elapsed,

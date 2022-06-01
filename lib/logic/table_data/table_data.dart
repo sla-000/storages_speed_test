@@ -29,7 +29,7 @@ class TableState with _$TableState {
 class TableData extends Cubit<TableState> {
   TableData() : super(const TableState());
 
-  void add(StorageSwitch storage, MeasurementDto value) {
+  void addData(StorageSwitch storage, MeasurementDto value) {
     final Map<StorageSwitch, List<MeasurementDto>> newData =
         Map<StorageSwitch, List<MeasurementDto>>.of(state.data);
 
@@ -40,11 +40,9 @@ class TableData extends Cubit<TableState> {
       newData[storage] = <MeasurementDto>[];
     }
 
-    newData[storage]!.add(value);
-
-    print('state.hashCode=${state.hashCode}');
-    print(
-        'state.copyWith(data: newData).hashCode=${state.copyWith(data: newData).hashCode}');
+    newData[storage] = List<MeasurementDto>.unmodifiable(
+      List<MeasurementDto>.of(newData[storage]!)..add(value),
+    );
 
     emit(state.copyWith(data: newData));
   }
