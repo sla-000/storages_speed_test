@@ -11,7 +11,10 @@ import 'package:ids_list/storage/storage_repo.dart';
 class SelectStorage extends StatefulWidget {
   const SelectStorage({
     super.key,
+    this.enabled = true,
   });
+
+  final bool enabled;
 
   @override
   State<SelectStorage> createState() => _SelectStorageState();
@@ -30,76 +33,88 @@ class _SelectStorageState extends State<SelectStorage> {
             title: const Text('Shared Preferences'),
             value: StorageSwitch.sharedPreferences,
             groupValue: _storageSwitch,
-            onChanged: (StorageSwitch? value) {
-              di<Settings>().change(
-                (SettingsState settings) => settings.copyWith(storage: value!),
-              );
+            onChanged: widget.enabled
+                ? (StorageSwitch? value) {
+                    di<Settings>().change(
+                      (SettingsState settings) =>
+                          settings.copyWith(storage: value!),
+                    );
 
-              di.unregister<StorageRepo>();
+                    di.unregister<StorageRepo>();
 
-              di.registerLazySingleton<StorageRepo>(
-                  () => SharedPrefsRepoImpl());
+                    di.registerFactory<StorageRepo>(
+                        () => SharedPrefsRepoImpl());
 
-              setState(() {
-                _storageSwitch = value!;
-              });
-            },
+                    setState(() {
+                      _storageSwitch = value!;
+                    });
+                  }
+                : null,
           ),
           RadioListTile<StorageSwitch>(
             title: const Text('Sqflite Simple'),
             value: StorageSwitch.sqfliteSimple,
             groupValue: _storageSwitch,
-            onChanged: (StorageSwitch? value) {
-              di<Settings>().change(
-                (SettingsState settings) => settings.copyWith(storage: value!),
-              );
+            onChanged: widget.enabled
+                ? (StorageSwitch? value) {
+                    di<Settings>().change(
+                      (SettingsState settings) =>
+                          settings.copyWith(storage: value!),
+                    );
 
-              di.unregister<StorageRepo>();
+                    di.unregister<StorageRepo>();
 
-              di.registerLazySingleton<StorageRepo>(
-                  () => SqfliteSimpleRepoImpl());
+                    di.registerFactory<StorageRepo>(
+                        () => SqfliteSimpleRepoImpl());
 
-              setState(() {
-                _storageSwitch = value!;
-              });
-            },
+                    setState(() {
+                      _storageSwitch = value!;
+                    });
+                  }
+                : null,
           ),
           RadioListTile<StorageSwitch>(
             title: const Text('Sqflite Indexed'),
             value: StorageSwitch.sqfliteIndexed,
             groupValue: _storageSwitch,
-            onChanged: (StorageSwitch? value) {
-              di<Settings>().change(
-                (SettingsState settings) => settings.copyWith(storage: value!),
-              );
+            onChanged: widget.enabled
+                ? (StorageSwitch? value) {
+                    di<Settings>().change(
+                      (SettingsState settings) =>
+                          settings.copyWith(storage: value!),
+                    );
 
-              di.unregister<StorageRepo>();
+                    di.unregister<StorageRepo>();
 
-              di.registerLazySingleton<StorageRepo>(
-                  () => SqfliteIndexedRepoImpl());
+                    di.registerFactory<StorageRepo>(
+                        () => SqfliteIndexedRepoImpl());
 
-              setState(() {
-                _storageSwitch = value!;
-              });
-            },
+                    setState(() {
+                      _storageSwitch = value!;
+                    });
+                  }
+                : null,
           ),
           RadioListTile<StorageSwitch>(
             title: const Text('Hive'),
             value: StorageSwitch.hive,
             groupValue: _storageSwitch,
-            onChanged: (StorageSwitch? value) {
-              di<Settings>().change(
-                (SettingsState settings) => settings.copyWith(storage: value!),
-              );
+            onChanged: widget.enabled
+                ? (StorageSwitch? value) {
+                    di<Settings>().change(
+                      (SettingsState settings) =>
+                          settings.copyWith(storage: value!),
+                    );
 
-              di.unregister<StorageRepo>();
+                    di.unregister<StorageRepo>();
 
-              di.registerLazySingleton<StorageRepo>(() => HiveRepoImpl());
+                    di.registerFactory<StorageRepo>(() => HiveRepoImpl());
 
-              setState(() {
-                _storageSwitch = value!;
-              });
-            },
+                    setState(() {
+                      _storageSwitch = value!;
+                    });
+                  }
+                : null,
           ),
         ],
       ),

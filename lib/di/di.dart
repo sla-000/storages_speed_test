@@ -7,7 +7,7 @@ import 'package:ids_list/storage/storage_repo.dart';
 final GetIt di = GetIt.instance;
 
 void initDi() {
-  di.registerLazySingleton<StorageRepo>(() => SharedPrefsRepoImpl());
+  di.registerFactory<StorageRepo>(() => SharedPrefsRepoImpl());
 
   di.registerLazySingleton<TableData>(
     () => TableData(),

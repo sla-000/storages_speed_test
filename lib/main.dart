@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ids_list/di/di.dart';
 import 'package:ids_list/logic/settings/settings.dart';
@@ -8,7 +10,6 @@ import 'package:ids_list/ui/select_storage.dart';
 
 const int _kInitialKey = 4565400000000;
 const int _kKeysNumber = 50000;
-const int _kKeyToFind = 4567000000 + _kKeysNumber - 1;
 
 void main() {
   runApp(const MyApp());
@@ -76,7 +77,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     _isBusy ? const CircularProgressIndicator() : const Align(),
               ),
             ),
-            const SelectStorage(),
+            SelectStorage(enabled: !_isBusy),
             const Expanded(
               child: Padding(
                 padding: EdgeInsets.all(16),
@@ -87,44 +88,56 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          if (!di.isRegistered<StorageRepo>()) {
-            return;
-          }
+        onPressed: _isBusy
+            ? null
+            : () async {
+                if (!di.isRegistered<StorageRepo>()) {
+                  return;
+                }
 
-          setState(() {
-            _isBusy = true;
-          });
+                setState(() {
+                  _isBusy = true;
+                });
 
-          final StorageRepo repo = di<StorageRepo>();
+                final StorageRepo repo = di<StorageRepo>();
 
-          final List<String> values = List<String>.generate(
-            _kKeysNumber,
-            (int index) => (_kInitialKey + index).toString(),
-          );
+                try {
+                  final Random rand =
+                      Random(DateTime.now().microsecondsSinceEpoch);
 
-          final Stopwatch fillTime = Stopwatch();
-          fillTime.start();
-          await repo.fill(values);
-          fillTime.stop();
+                  final List<String> values = List<String>.generate(
+                    _kKeysNumber,
+                    (int index) => (_kInitialKey + index).toString(),
+                  );
 
-          final Stopwatch searchTime = Stopwatch();
-          searchTime.start();
-          await repo.isPresent(_kKeyToFind.toString());
-          searchTime.stop();
+                  final Stopwatch fillTime = Stopwatch();
+                  fillTime.start();
+                  await repo.fill(values);
+                  fillTime.stop();
 
-          setState(() {
-            _isBusy = false;
-          });
+                  final Stopwatch searchTime = Stopwatch();
+                  searchTime.start();
+                  for (int i = 0; i < 100; ++i) {
+                    final int key = _kInitialKey + rand.nextInt(_kKeysNumber);
+                    await repo.isPresent(key.toString());
+                  }
+                  searchTime.stop();
 
-          di<TableData>().addData(
-            di<Settings>().state.storage,
-            MeasurementDto(
-              fill: fillTime.elapsed,
-              search: searchTime.elapsed,
-            ),
-          );
-        },
+                  setState(() {
+                    _isBusy = false;
+                  });
+
+                  di<TableData>().addData(
+                    di<Settings>().state.storage,
+                    MeasurementDto(
+                      fill: fillTime.elapsed,
+                      search: searchTime.elapsed,
+                    ),
+                  );
+                } finally {
+                  repo.dispose();
+                }
+              },
         autofocus: true,
         child: const Icon(Icons.timer),
       ),
