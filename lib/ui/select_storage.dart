@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:ids_list/di.dart';
+import 'package:ids_list/di/di.dart';
+import 'package:ids_list/logic/table_data.dart';
 import 'package:ids_list/storage/hive_repo_impl.dart';
 import 'package:ids_list/storage/shared_prefs_repo_impl.dart';
 import 'package:ids_list/storage/sqflite_indexed_repo_impl.dart';
 import 'package:ids_list/storage/sqflite_simple_repo_impl.dart';
 import 'package:ids_list/storage/storage_repo.dart';
 
-enum StorageSwitch {
-  sharedPreferences,
-  sqfliteSimple,
-  sqfliteIndexed,
-  hive,
-}
-
 class SelectStorage extends StatefulWidget {
   const SelectStorage({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<SelectStorage> createState() => _SelectStorageState();

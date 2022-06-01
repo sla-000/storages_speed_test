@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ids_list/di.dart';
-import 'package:ids_list/select_storage.dart';
+import 'package:ids_list/di/di.dart';
 import 'package:ids_list/storage/storage_repo.dart';
+import 'package:ids_list/ui/results_table.dart';
+import 'package:ids_list/ui/select_storage.dart';
 
 const int _kInitialKey = 4565400000000;
 const int _kKeysNumber = 50000;
@@ -12,7 +13,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +29,9 @@ class MyApp extends StatelessWidget {
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({
-    Key? key,
+    super.key,
     required this.title,
-  }) : super(key: key);
+  });
 
   final String title;
 
@@ -82,7 +83,8 @@ class _MyHomePageState extends State<MyHomePage> {
               dimension: 64,
               child:
                   _isBusy ? const CircularProgressIndicator() : const Align(),
-            )
+            ),
+            const ResultsTable(),
           ],
         ),
       ),
@@ -91,26 +93,31 @@ class _MyHomePageState extends State<MyHomePage> {
           setState(() {
             _fillTimeStr = '';
             _searchTimeStr = '';
-            _isBusy = true;
           });
 
           if (!di.isRegistered<StorageRepo>()) {
             return;
           }
 
+          setState(() {
+            _isBusy = true;
+          });
+
+          final StorageRepo repo = di<StorageRepo>();
+
           final List<String> values = List<String>.generate(
             _kKeysNumber,
-            (index) => (_kInitialKey + index).toString(),
+            (int index) => (_kInitialKey + index).toString(),
           );
 
           final Stopwatch fillTime = Stopwatch();
           fillTime.start();
-          await di<StorageRepo>().fill(values);
+          await repo.fill(values);
           fillTime.stop();
 
           final Stopwatch searchTime = Stopwatch();
           searchTime.start();
-          await di<StorageRepo>().isPresent(_kKeyToFind.toString());
+          await repo.isPresent(_kKeyToFind.toString());
           searchTime.stop();
 
           setState(() {

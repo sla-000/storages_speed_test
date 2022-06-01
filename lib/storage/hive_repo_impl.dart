@@ -11,9 +11,9 @@ class HiveRepoImpl implements StorageRepo {
     _open();
   }
 
-  late final Box _box;
+  late final Box<String> _box;
 
-  final Completer<void> _initCompleter = Completer();
+  final Completer<void> _initCompleter = Completer<void>();
 
   Future<void> _open() async {
     try {
@@ -38,7 +38,7 @@ class HiveRepoImpl implements StorageRepo {
   Future<bool> isPresent(String value) async {
     await _initCompleter.future;
 
-    final String? val = await _box.get(value);
+    final String? val = _box.get(value);
 
     if (val == null) {
       return false;

@@ -12,7 +12,7 @@ class SqfliteRepoImpl implements StorageRepo {
 
   late final Database _db;
 
-  final Completer<void> _initCompleter = Completer();
+  final Completer<void> _initCompleter = Completer<void>();
 
   static const String kKey = 'test_table';
 
@@ -42,8 +42,8 @@ class SqfliteRepoImpl implements StorageRepo {
     await _initCompleter.future;
 
     await _db.transaction((Transaction transaction) async {
-      for (final key in keys) {
-        await transaction.insert(kKey, {'key': key});
+      for (final String key in keys) {
+        await transaction.insert(kKey, <String, String>{'key': key});
       }
     });
   }
@@ -54,10 +54,10 @@ class SqfliteRepoImpl implements StorageRepo {
 
     final List<Map<String, Object?>> query = await _db.query(
       kKey,
-      columns: ['key'],
+      columns: <String>['key'],
       limit: 1,
       where: 'key == ?',
-      whereArgs: [value],
+      whereArgs: <String>[value],
     );
 
     if (query.isEmpty) {

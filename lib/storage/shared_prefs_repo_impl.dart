@@ -12,7 +12,7 @@ class SharedPrefsRepoImpl implements StorageRepo {
 
   late final SharedPreferences _prefs;
 
-  final Completer<void> _initCompleter = Completer();
+  final Completer<void> _initCompleter = Completer<void>();
 
   Future<void> _open() async {
     try {
@@ -35,7 +35,8 @@ class SharedPrefsRepoImpl implements StorageRepo {
   Future<bool> isPresent(String key) async {
     await _initCompleter.future;
 
-    Set<String> values = _prefs.getStringList(_kKey)?.toSet() ?? <String>{};
+    final Set<String> values =
+        _prefs.getStringList(_kKey)?.toSet() ?? <String>{};
 
     return values.contains(key);
   }
