@@ -8,4 +8,4 @@ Simple project to test how fast work the different types of storage
 
 ## Results on MacOs
 
-![Macos](/page/macos.png)
+![MacOs](/page/macos.png "MacOs")
