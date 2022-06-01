@@ -28,7 +28,7 @@ class SharedPrefsRepoImpl implements StorageRepo {
   Future<void> fill(List<String> keys) async {
     await _initCompleter.future;
 
-    _prefs.setStringList(_kKey, keys);
+    await _prefs.setStringList(_kKey, keys);
   }
 
   @override

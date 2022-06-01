@@ -7,11 +7,13 @@ class SqfliteIndexedRepoImpl extends SqfliteRepoImpl {
   SqfliteIndexedRepoImpl() : super();
 
   @override
+  String get kKey => 'test_indexed_table';
+
+  @override
   FutureOr<void> onCreateDb(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE ${SqfliteRepoImpl.kKey} (id INTEGER PRIMARY KEY, key TEXT, value TEXT)');
+        'CREATE TABLE $kKey (id INTEGER PRIMARY KEY, key TEXT, value TEXT)');
 
-    await db.execute(
-        'CREATE INDEX ${SqfliteRepoImpl.kKey}_index ON ${SqfliteRepoImpl.kKey} (key)');
+    await db.execute('CREATE INDEX ${kKey}_index ON $kKey (key)');
   }
 }

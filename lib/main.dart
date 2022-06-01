@@ -68,10 +68,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox.square(
-              dimension: 64,
-              child:
-                  _isBusy ? const CircularProgressIndicator() : const Align(),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: SizedBox.square(
+                dimension: 64,
+                child:
+                    _isBusy ? const CircularProgressIndicator() : const Align(),
+              ),
             ),
             const SelectStorage(),
             const Expanded(

@@ -16,7 +16,7 @@ class ResultsTable extends StatelessWidget {
       builder: (BuildContext context, TableState state) {
         final Map<StorageSwitch, List<MeasurementDto>> data = state.data;
 
-        final int maxRows = data.values.fold(0, _selectBiggest);
+        final int maxRows = data.values.fold(0, _selectLongest);
         final int maxColumns = data.keys.length;
 
         return Scrollbar(
@@ -67,6 +67,6 @@ class ResultsTable extends StatelessWidget {
 
   String _getText(Duration duration) => duration.inMicroseconds.toString();
 
-  int _selectBiggest(int previousValue, List<MeasurementDto> element) =>
+  int _selectLongest(int previousValue, List<MeasurementDto> element) =>
       (previousValue > element.length) ? previousValue : element.length;
 }

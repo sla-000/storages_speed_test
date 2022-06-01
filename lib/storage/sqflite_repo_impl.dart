@@ -5,7 +5,7 @@ import 'package:ids_list/storage/storage_repo.dart';
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 
-class SqfliteRepoImpl implements StorageRepo {
+abstract class SqfliteRepoImpl implements StorageRepo {
   SqfliteRepoImpl() {
     _open();
   }
@@ -14,7 +14,7 @@ class SqfliteRepoImpl implements StorageRepo {
 
   final Completer<void> _initCompleter = Completer<void>();
 
-  static const String kKey = 'test_table';
+  String get kKey;
 
   Future<void> _open() async {
     try {
@@ -30,10 +30,7 @@ class SqfliteRepoImpl implements StorageRepo {
     }
   }
 
-  FutureOr<void> onCreateDb(Database db, int version) async {
-    await db.execute(
-        'CREATE TABLE $kKey (id INTEGER PRIMARY KEY, key TEXT, value TEXT)');
-  }
+  FutureOr<void> onCreateDb(Database db, int version);
 
   String get _dbFilePath => path.join(Directory.systemTemp.path, '$kKey.db');
 
