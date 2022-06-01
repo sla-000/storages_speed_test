@@ -42,8 +42,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String _fillTimeStr = '';
-  String _searchTimeStr = '';
   bool _isBusy = false;
 
   @override
@@ -70,33 +68,22 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const SelectStorage(),
-            const SizedBox(height: 16),
-            Text(
-              'Fill time (µs): $_fillTimeStr',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            Text(
-              'Search time (µs): $_searchTimeStr',
-              style: Theme.of(context).textTheme.headlineSmall,
-            ),
-            const SizedBox(height: 16),
             SizedBox.square(
               dimension: 64,
               child:
                   _isBusy ? const CircularProgressIndicator() : const Align(),
             ),
-            const ResultsTable(),
+            const SelectStorage(),
+            const SizedBox(height: 16),
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16),
+              child: ResultsTable(),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          setState(() {
-            _fillTimeStr = '';
-            _searchTimeStr = '';
-          });
-
           if (!di.isRegistered<StorageRepo>()) {
             return;
           }
@@ -123,8 +110,6 @@ class _MyHomePageState extends State<MyHomePage> {
           searchTime.stop();
 
           setState(() {
-            _fillTimeStr = fillTime.elapsed.inMicroseconds.toString();
-            _searchTimeStr = searchTime.elapsed.inMicroseconds.toString();
             _isBusy = false;
           });
 

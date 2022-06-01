@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ids_list/di/di.dart';
@@ -12,17 +10,18 @@ class ResultsTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TableData, Map<StorageSwitch, List<MeasurementDto>>>(
+    return BlocBuilder<TableData, TableState>(
       bloc: di<TableData>(),
-      builder: (BuildContext context,
-          Map<StorageSwitch, List<MeasurementDto>> state) {
-        log('state=$state');
+      builder: (BuildContext context, TableState state) {
+        print('data=${state.data}');
 
-        final int maxLength = state.values.fold(0, _selectBiggest);
+        final Map<StorageSwitch, List<MeasurementDto>> data = state.data;
 
-        final List<TableRow> rows = state.keys
+        final int maxLength = data.values.fold(0, _selectBiggest);
+
+        final List<TableRow> rows = data.keys
             .map<TableRow>(
-              (StorageSwitch storage) => _getRow(state, storage),
+              (StorageSwitch storage) => _getRow(data, storage),
             )
             .toList()
           ..insert(
@@ -49,13 +48,16 @@ class ResultsTable extends StatelessWidget {
     return TableRow(
       children: state[storage]!
           .map<Widget>(
-            (MeasurementDto data) => Text('${data.fill}\n${data.search}'),
+            (MeasurementDto data) =>
+                Text('${_getText(data.fill)}\n${_getText(data.search)}'),
           )
           .toList()
         ..insert(0, Text(storage.toString())),
     );
   }
 
+  String _getText(Duration duration) => duration.inMicroseconds.toString();
+
   int _selectBiggest(int previousValue, List<MeasurementDto> element) =>
-      previousValue > element.length ? previousValue : element.length;
+      (previousValue > element.length) ? previousValue : element.length;
 }

@@ -1,6 +1,7 @@
-import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:meta/meta.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'table_data.freezed.dart';
 
 enum StorageSwitch {
   sharedPreferences,
@@ -9,37 +10,42 @@ enum StorageSwitch {
   hive,
 }
 
-@immutable
-class MeasurementDto extends Equatable {
-  const MeasurementDto({
-    required this.fill,
-    required this.search,
-  });
-
-  final Duration fill;
-  final Duration search;
-
-  @override
-  List<Object> get props => <Object>[fill, search];
-
-  @override
-  bool get stringify => true;
+@freezed
+class MeasurementDto with _$MeasurementDto {
+  const factory MeasurementDto({
+    required Duration fill,
+    required Duration search,
+  }) = _MeasurementDto;
 }
 
-class TableData extends Cubit<Map<StorageSwitch, List<MeasurementDto>>> {
-  TableData() : super(<StorageSwitch, List<MeasurementDto>>{});
+@freezed
+class TableState with _$TableState {
+  const factory TableState({
+    @Default(<StorageSwitch, List<MeasurementDto>>{})
+        Map<StorageSwitch, List<MeasurementDto>> data,
+  }) = _TableState;
+}
 
-  void add(StorageSwitch storageSwitch, MeasurementDto value) {
-    final Map<StorageSwitch, List<MeasurementDto>> newState =
-        Map<StorageSwitch, List<MeasurementDto>>.of(state);
+class TableData extends Cubit<TableState> {
+  TableData() : super(const TableState());
 
-    if (newState[storageSwitch] == null) {
-      newState[storageSwitch] = <MeasurementDto>[];
+  void add(StorageSwitch storage, MeasurementDto value) {
+    final Map<StorageSwitch, List<MeasurementDto>> newData =
+        Map<StorageSwitch, List<MeasurementDto>>.of(state.data);
+
+    print('data.hashCode=${state.data.hashCode}');
+    print('newData.hashCode=${newData.hashCode}');
+
+    if (newData[storage] == null) {
+      newData[storage] = <MeasurementDto>[];
     }
 
-    newState[storageSwitch] =
-        List<MeasurementDto>.unmodifiable(newState[storageSwitch]!..add(value));
+    newData[storage]!.add(value);
 
-    emit(Map<StorageSwitch, List<MeasurementDto>>.unmodifiable(newState));
+    print('state.hashCode=${state.hashCode}');
+    print(
+        'state.copyWith(data: newData).hashCode=${state.copyWith(data: newData).hashCode}');
+
+    emit(state.copyWith(data: newData));
   }
 }
