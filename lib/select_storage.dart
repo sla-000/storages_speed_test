@@ -26,17 +26,6 @@ class _SelectStorageState extends State<SelectStorage> {
   StorageSwitch _storageSwitch = StorageSwitch.sharedPreferences;
 
   @override
-  void initState() {
-    super.initState();
-
-    if (di.isRegistered<StorageRepo>()) {
-      di.unregister<StorageRepo>();
-    }
-
-    di.registerLazySingleton<StorageRepo>(() => SharedPrefsRepoImpl());
-  }
-
-  @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 300,
