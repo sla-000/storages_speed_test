@@ -7,7 +7,27 @@ enum StorageSwitch {
   sharedPreferences,
   sqfliteSimple,
   sqfliteIndexed,
-  hive,
+  hive;
+
+  @override
+  String toString() {
+    switch (this) {
+      case sharedPreferences:
+        return 'Shared Preferences';
+
+      case sqfliteSimple:
+        return 'Sqflite Simple';
+
+      case sqfliteIndexed:
+        return 'Sqflite Indexed';
+
+      case hive:
+        return 'Hive';
+
+      default:
+        throw StateError('WTF is $this');
+    }
+  }
 }
 
 @freezed

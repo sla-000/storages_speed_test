@@ -74,10 +74,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   _isBusy ? const CircularProgressIndicator() : const Align(),
             ),
             const SelectStorage(),
-            const SizedBox(height: 16),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: ResultsTable(),
+            const Expanded(
+              child: Padding(
+                padding: EdgeInsets.all(16),
+                child: ResultsTable(),
+              ),
             ),
           ],
         ),
