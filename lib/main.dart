@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ids_list/di/di.dart';
+import 'package:ids_list/logic/settings/settings.dart';
+import 'package:ids_list/logic/table_data/table_data.dart';
 import 'package:ids_list/storage/storage_repo.dart';
 import 'package:ids_list/ui/results_table.dart';
 import 'package:ids_list/ui/select_storage.dart';
@@ -125,6 +127,14 @@ class _MyHomePageState extends State<MyHomePage> {
             _searchTimeStr = searchTime.elapsed.inMicroseconds.toString();
             _isBusy = false;
           });
+
+          di<TableData>().add(
+            di<Settings>().state.storage,
+            MeasurementDto(
+              fill: fillTime.elapsed,
+              search: searchTime.elapsed,
+            ),
+          );
         },
         autofocus: true,
         child: const Icon(Icons.timer),
