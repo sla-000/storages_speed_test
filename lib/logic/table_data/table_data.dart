@@ -53,9 +53,6 @@ class TableData extends Cubit<TableState> {
     final Map<StorageSwitch, List<MeasurementDto>> newData =
         Map<StorageSwitch, List<MeasurementDto>>.of(state.data);
 
-    print('data.hashCode=${state.data.hashCode}');
-    print('newData.hashCode=${newData.hashCode}');
-
     if (newData[storage] == null) {
       newData[storage] = <MeasurementDto>[];
     }

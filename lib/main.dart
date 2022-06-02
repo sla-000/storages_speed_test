@@ -8,8 +8,8 @@ import 'package:ids_list/storage/storage_repo.dart';
 import 'package:ids_list/ui/results_table.dart';
 import 'package:ids_list/ui/select_storage.dart';
 
-const int _kInitialKey = 4565400000000;
-const int _kKeysNumber = 50000;
+const int _kInitialKey = 4565486300000;
+const int _kKeysNumber = 10000;
 
 void main() {
   runApp(const MyApp());
@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   final Stopwatch searchTime = Stopwatch();
                   searchTime.start();
-                  for (int i = 0; i < 100; ++i) {
+                  for (int i = 0; i < 1000; ++i) {
                     final int key = _kInitialKey + rand.nextInt(_kKeysNumber);
                     await repo.isPresent(key.toString());
                   }

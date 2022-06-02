@@ -21,38 +21,49 @@ class ResultsTable extends StatelessWidget {
 
         return Scrollbar(
           child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Table(
-              defaultColumnWidth: const FixedColumnWidth(120),
-              border: TableBorder.all(),
-              children: tableChildren(
-                context: context,
-                rows: maxRows + 1,
-                columns: maxColumns + 1,
-                builder: (BuildContext context, int column, int row) {
-                  if (column == 0 && row == 0) {
-                    return const Center();
-                  } else if (row == 0) {
-                    return Center(
-                        child: Text('${data.keys.toList()[column - 1]}'));
-                  } else if (column == 0) {
-                    return Center(child: Text(row.toString()));
-                  }
-
-                  if (column > data.keys.length ||
-                      row >
-                          (data[data.keys.toList()[column - 1]]?.length ?? 0)) {
-                    return const Center();
-                  }
-
-                  return Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(_getText(_getData(data, row, column).fill)),
-                      Text(_getText(_getData(data, row, column).search)),
-                    ],
-                  );
+            scrollDirection: Axis.horizontal,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Table(
+                defaultColumnWidth: const FixedColumnWidth(90),
+                columnWidths: const <int, TableColumnWidth>{
+                  0: FixedColumnWidth(40),
                 },
+                border: TableBorder.all(),
+                children: tableChildren(
+                  context: context,
+                  rows: maxRows + 1,
+                  columns: maxColumns + 1,
+                  builder: (BuildContext context, int column, int row) {
+                    if (column == 0 && row == 0) {
+                      return const Center();
+                    } else if (row == 0) {
+                      return Center(
+                        child: Text(
+                          '${data.keys.toList()[column - 1]}',
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    } else if (column == 0) {
+                      return Center(child: Text(row.toString()));
+                    }
+
+                    if (column > data.keys.length ||
+                        row >
+                            (data[data.keys.toList()[column - 1]]?.length ??
+                                0)) {
+                      return const Center();
+                    }
+
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(_getText(_getData(data, row, column).fill)),
+                        Text(_getText(_getData(data, row, column).search)),
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
