@@ -3,6 +3,7 @@ import 'package:ids_list/di/di.dart';
 import 'package:ids_list/logic/settings/settings.dart';
 import 'package:ids_list/logic/table_data/table_data.dart';
 import 'package:ids_list/storage/hive_repo_impl.dart';
+import 'package:ids_list/storage/semblast_simple_repo_impl.dart';
 import 'package:ids_list/storage/shared_prefs_repo_impl.dart';
 import 'package:ids_list/storage/sqflite_indexed_repo_impl.dart';
 import 'package:ids_list/storage/sqflite_simple_repo_impl.dart';
@@ -30,7 +31,7 @@ class _SelectStorageState extends State<SelectStorage> {
       child: Column(
         children: <Widget>[
           RadioListTile<StorageSwitch>(
-            title: const Text('Shared Preferences'),
+            title: Text(StorageSwitch.sharedPreferences.toString()),
             value: StorageSwitch.sharedPreferences,
             groupValue: _storageSwitch,
             onChanged: widget.enabled
@@ -41,7 +42,6 @@ class _SelectStorageState extends State<SelectStorage> {
                     );
 
                     di.unregister<StorageRepo>();
-
                     di.registerFactory<StorageRepo>(
                         () => SharedPrefsRepoImpl());
 
@@ -52,7 +52,7 @@ class _SelectStorageState extends State<SelectStorage> {
                 : null,
           ),
           RadioListTile<StorageSwitch>(
-            title: const Text('Sqflite Simple'),
+            title: Text(StorageSwitch.sqfliteSimple.toString()),
             value: StorageSwitch.sqfliteSimple,
             groupValue: _storageSwitch,
             onChanged: widget.enabled
@@ -63,7 +63,6 @@ class _SelectStorageState extends State<SelectStorage> {
                     );
 
                     di.unregister<StorageRepo>();
-
                     di.registerFactory<StorageRepo>(
                         () => SqfliteSimpleRepoImpl());
 
@@ -74,7 +73,7 @@ class _SelectStorageState extends State<SelectStorage> {
                 : null,
           ),
           RadioListTile<StorageSwitch>(
-            title: const Text('Sqflite Indexed'),
+            title: Text(StorageSwitch.sqfliteIndexed.toString()),
             value: StorageSwitch.sqfliteIndexed,
             groupValue: _storageSwitch,
             onChanged: widget.enabled
@@ -85,7 +84,6 @@ class _SelectStorageState extends State<SelectStorage> {
                     );
 
                     di.unregister<StorageRepo>();
-
                     di.registerFactory<StorageRepo>(
                         () => SqfliteIndexedRepoImpl());
 
@@ -96,7 +94,7 @@ class _SelectStorageState extends State<SelectStorage> {
                 : null,
           ),
           RadioListTile<StorageSwitch>(
-            title: const Text('Hive'),
+            title: Text(StorageSwitch.hive.toString()),
             value: StorageSwitch.hive,
             groupValue: _storageSwitch,
             onChanged: widget.enabled
@@ -107,8 +105,28 @@ class _SelectStorageState extends State<SelectStorage> {
                     );
 
                     di.unregister<StorageRepo>();
-
                     di.registerFactory<StorageRepo>(() => HiveRepoImpl());
+
+                    setState(() {
+                      _storageSwitch = value!;
+                    });
+                  }
+                : null,
+          ),
+          RadioListTile<StorageSwitch>(
+            title: Text(StorageSwitch.semblastSimple.toString()),
+            value: StorageSwitch.semblastSimple,
+            groupValue: _storageSwitch,
+            onChanged: widget.enabled
+                ? (StorageSwitch? value) {
+                    di<Settings>().change(
+                      (SettingsState settings) =>
+                          settings.copyWith(storage: value!),
+                    );
+
+                    di.unregister<StorageRepo>();
+                    di.registerFactory<StorageRepo>(
+                        () => SemblastSimpleRepoImpl());
 
                     setState(() {
                       _storageSwitch = value!;

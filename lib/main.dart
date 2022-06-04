@@ -117,9 +117,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   final Stopwatch searchTime = Stopwatch();
                   searchTime.start();
+                  bool found = true;
                   for (int i = 0; i < 1000; ++i) {
                     final int key = _kInitialKey + rand.nextInt(_kKeysNumber);
-                    await repo.isPresent(key.toString());
+                    if (!await repo.isPresent(key.toString())) {
+                      found = false;
+                    }
                   }
                   searchTime.stop();
 
@@ -131,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     di<Settings>().state.storage,
                     MeasurementDto(
                       fill: fillTime.elapsed,
-                      search: searchTime.elapsed,
+                      search: found ? searchTime.elapsed : Duration.zero,
                     ),
                   );
                 } finally {
