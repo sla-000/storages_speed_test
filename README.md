@@ -4,7 +4,8 @@ Simple project to test how fast work the different types of storage
 
 - Hive
 - Shared Preferences
-- Sqflite (naive / indexed)
+- Sqflite (naive and indexed)
+- Semblast (simple - key/value)
 
 ## Results
 
