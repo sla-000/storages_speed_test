@@ -18,6 +18,7 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$MeasurementDto {
   Duration get fill => throw _privateConstructorUsedError;
   Duration get search => throw _privateConstructorUsedError;
+  int get size => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $MeasurementDtoCopyWith<MeasurementDto> get copyWith =>
@@ -29,7 +30,7 @@ abstract class $MeasurementDtoCopyWith<$Res> {
   factory $MeasurementDtoCopyWith(
           MeasurementDto value, $Res Function(MeasurementDto) then) =
       _$MeasurementDtoCopyWithImpl<$Res>;
-  $Res call({Duration fill, Duration search});
+  $Res call({Duration fill, Duration search, int size});
 }
 
 /// @nodoc
@@ -45,6 +46,7 @@ class _$MeasurementDtoCopyWithImpl<$Res>
   $Res call({
     Object? fill = freezed,
     Object? search = freezed,
+    Object? size = freezed,
   }) {
     return _then(_value.copyWith(
       fill: fill == freezed
@@ -55,6 +57,10 @@ class _$MeasurementDtoCopyWithImpl<$Res>
           ? _value.search
           : search // ignore: cast_nullable_to_non_nullable
               as Duration,
+      size: size == freezed
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -66,7 +72,7 @@ abstract class _$$_MeasurementDtoCopyWith<$Res>
           _$_MeasurementDto value, $Res Function(_$_MeasurementDto) then) =
       __$$_MeasurementDtoCopyWithImpl<$Res>;
   @override
-  $Res call({Duration fill, Duration search});
+  $Res call({Duration fill, Duration search, int size});
 }
 
 /// @nodoc
@@ -84,6 +90,7 @@ class __$$_MeasurementDtoCopyWithImpl<$Res>
   $Res call({
     Object? fill = freezed,
     Object? search = freezed,
+    Object? size = freezed,
   }) {
     return _then(_$_MeasurementDto(
       fill: fill == freezed
@@ -94,6 +101,10 @@ class __$$_MeasurementDtoCopyWithImpl<$Res>
           ? _value.search
           : search // ignore: cast_nullable_to_non_nullable
               as Duration,
+      size: size == freezed
+          ? _value.size
+          : size // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -101,16 +112,19 @@ class __$$_MeasurementDtoCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_MeasurementDto implements _MeasurementDto {
-  const _$_MeasurementDto({required this.fill, required this.search});
+  const _$_MeasurementDto(
+      {required this.fill, required this.search, required this.size});
 
   @override
   final Duration fill;
   @override
   final Duration search;
+  @override
+  final int size;
 
   @override
   String toString() {
-    return 'MeasurementDto(fill: $fill, search: $search)';
+    return 'MeasurementDto(fill: $fill, search: $search, size: $size)';
   }
 
   @override
@@ -119,14 +133,16 @@ class _$_MeasurementDto implements _MeasurementDto {
         (other.runtimeType == runtimeType &&
             other is _$_MeasurementDto &&
             const DeepCollectionEquality().equals(other.fill, fill) &&
-            const DeepCollectionEquality().equals(other.search, search));
+            const DeepCollectionEquality().equals(other.search, search) &&
+            const DeepCollectionEquality().equals(other.size, size));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(fill),
-      const DeepCollectionEquality().hash(search));
+      const DeepCollectionEquality().hash(search),
+      const DeepCollectionEquality().hash(size));
 
   @JsonKey(ignore: true)
   @override
@@ -137,12 +153,15 @@ class _$_MeasurementDto implements _MeasurementDto {
 abstract class _MeasurementDto implements MeasurementDto {
   const factory _MeasurementDto(
       {required final Duration fill,
-      required final Duration search}) = _$_MeasurementDto;
+      required final Duration search,
+      required final int size}) = _$_MeasurementDto;
 
   @override
   Duration get fill => throw _privateConstructorUsedError;
   @override
   Duration get search => throw _privateConstructorUsedError;
+  @override
+  int get size => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_MeasurementDtoCopyWith<_$_MeasurementDto> get copyWith =>

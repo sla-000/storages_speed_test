@@ -46,6 +46,12 @@ abstract class SqfliteRepoImpl implements StorageRepo {
   }
 
   @override
+  Future<int> dbSize() async {
+    final File file = File(_dbFilePath);
+    return file.statSync().size;
+  }
+
+  @override
   Future<bool> isPresent(String value) async {
     await _initCompleter.future;
 

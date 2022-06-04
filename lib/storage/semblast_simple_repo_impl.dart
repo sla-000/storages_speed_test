@@ -44,6 +44,12 @@ class SemblastSimpleRepoImpl implements StorageRepo {
   }
 
   @override
+  Future<int> dbSize() async {
+    final File file = File(_dbPath);
+    return file.statSync().size;
+  }
+
+  @override
   Future<bool> isPresent(String value) async {
     await _initCompleter.future;
 

@@ -32,6 +32,9 @@ class SharedPrefsRepoImpl implements StorageRepo {
   }
 
   @override
+  int dbSize() => -1;
+
+  @override
   Future<bool> isPresent(String key) async {
     await _initCompleter.future;
 

@@ -8,8 +8,7 @@ enum StorageSwitch {
   sqfliteSimple,
   sqfliteIndexed,
   hive,
-  semblastSimple,
-  semblastDocument;
+  semblastSimple;
 
   @override
   String toString() {
@@ -29,9 +28,6 @@ enum StorageSwitch {
       case semblastSimple:
         return 'Semblast Simple';
 
-      case semblastDocument:
-        return 'Semblast Document';
-
       default:
         throw StateError('WTF is $this');
     }
@@ -43,6 +39,7 @@ class MeasurementDto with _$MeasurementDto {
   const factory MeasurementDto({
     required Duration fill,
     required Duration search,
+    required int size,
   }) = _MeasurementDto;
 }
 

@@ -135,6 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     MeasurementDto(
                       fill: fillTime.elapsed,
                       search: found ? searchTime.elapsed : Duration.zero,
+                      size: await repo.dbSize(),
                     ),
                   );
                 } finally {

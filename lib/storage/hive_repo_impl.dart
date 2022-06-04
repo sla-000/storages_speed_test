@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:hive/hive.dart';
 import 'package:ids_list/storage/storage_repo.dart';
+import 'package:path/path.dart' as path;
 
 const String _kKey = 'hive-a9564ebc3289b7a14551baf8ad5ec60a';
 
@@ -32,6 +33,12 @@ class HiveRepoImpl implements StorageRepo {
     await _box.putAll(
         <String, String>{for (final String element in keys) element: ''});
     await _box.flush();
+  }
+
+  @override
+  Future<int> dbSize() async {
+    final File file = File(path.join(Directory.systemTemp.path, '$_kKey.hive'));
+    return file.statSync().size;
   }
 
   @override
