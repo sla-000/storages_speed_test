@@ -8,7 +8,8 @@ enum StorageSwitch {
   sqfliteSimple,
   sqfliteIndexed,
   hive,
-  semblastSimple;
+  semblastSimple,
+  objectBox;
 
   @override
   String toString() {
@@ -27,6 +28,9 @@ enum StorageSwitch {
 
       case semblastSimple:
         return 'Semblast Simple';
+
+      case objectBox:
+        return 'ObjectBox';
 
       default:
         throw StateError('WTF is $this');

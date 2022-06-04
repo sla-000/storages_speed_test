@@ -3,6 +3,7 @@ import 'package:ids_list/di/di.dart';
 import 'package:ids_list/logic/settings/settings.dart';
 import 'package:ids_list/logic/table_data/table_data.dart';
 import 'package:ids_list/storage/hive_repo_impl.dart';
+import 'package:ids_list/storage/object_box_repo_impl.dart';
 import 'package:ids_list/storage/semblast_simple_repo_impl.dart';
 import 'package:ids_list/storage/shared_prefs_repo_impl.dart';
 import 'package:ids_list/storage/sqflite_indexed_repo_impl.dart';
@@ -127,6 +128,26 @@ class _SelectStorageState extends State<SelectStorage> {
                     di.unregister<StorageRepo>();
                     di.registerFactory<StorageRepo>(
                         () => SemblastSimpleRepoImpl());
+
+                    setState(() {
+                      _storageSwitch = value!;
+                    });
+                  }
+                : null,
+          ),
+          RadioListTile<StorageSwitch>(
+            title: Text(StorageSwitch.objectBox.toString()),
+            value: StorageSwitch.objectBox,
+            groupValue: _storageSwitch,
+            onChanged: widget.enabled
+                ? (StorageSwitch? value) {
+                    di<Settings>().change(
+                      (SettingsState settings) =>
+                          settings.copyWith(storage: value!),
+                    );
+
+                    di.unregister<StorageRepo>();
+                    di.registerFactory<StorageRepo>(() => ObjectBoxRepoImpl());
 
                     setState(() {
                       _storageSwitch = value!;
