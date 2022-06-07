@@ -141,7 +141,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       size: await repo.dbSize(),
                     ),
                   );
-                } on Exception catch (error, stackTrace) {
+                } on Exception catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('Error: $error'),
                   ));

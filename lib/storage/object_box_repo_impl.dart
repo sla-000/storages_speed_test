@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:ids_list/objectbox.g.dart';
 import 'package:ids_list/storage/storage_repo.dart';
-import 'package:objectbox/objectbox.dart';
 import 'package:path/path.dart' as path;
 
 @Entity()
