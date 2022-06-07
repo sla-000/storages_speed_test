@@ -6,55 +6,34 @@ import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart';
 
 abstract class SqfliteRepoImpl implements StorageRepo {
-  SqfliteRepoImpl() {
-    _open();
-  }
-
   late final Database _db;
-
-  final Completer<void> _initCompleter = Completer<void>();
 
   String get kKey;
 
-  Future<void> _open() async {
-    try {
-      _db = await openDatabase(
+  @override
+  Future<void> init() async => _db = await openDatabase(
         _dbFilePath,
         version: 1,
         onCreate: onCreateDb,
       );
-
-      _initCompleter.complete(null);
-    } on Exception catch (error, stackTrace) {
-      _initCompleter.completeError(error, stackTrace);
-    }
-  }
 
   FutureOr<void> onCreateDb(Database db, int version);
 
   String get _dbFilePath => path.join(Directory.systemTemp.path, '$kKey.db');
 
   @override
-  Future<void> fill(List<String> keys) async {
-    await _initCompleter.future;
-
-    await _db.transaction((Transaction transaction) async {
-      for (final String key in keys) {
-        await transaction.insert(kKey, <String, String>{'key': key});
-      }
-    });
-  }
+  Future<void> fill(List<String> keys) =>
+      _db.transaction((Transaction transaction) async {
+        for (final String key in keys) {
+          await transaction.insert(kKey, <String, String>{'key': key});
+        }
+      });
 
   @override
-  Future<int> dbSize() async {
-    final File file = File(_dbFilePath);
-    return file.statSync().size;
-  }
+  int dbSize() => File(_dbFilePath).statSync().size;
 
   @override
   Future<bool> isPresent(String value) async {
-    await _initCompleter.future;
-
     final List<Map<String, Object?>> query = await _db.query(
       kKey,
       columns: <String>['key'],
@@ -72,8 +51,6 @@ abstract class SqfliteRepoImpl implements StorageRepo {
 
   @override
   Future<void> dispose() async {
-    await _initCompleter.future;
-
     await _db.close();
     await deleteDatabase(_dbFilePath);
   }

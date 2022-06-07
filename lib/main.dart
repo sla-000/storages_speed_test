@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:ids_list/di/di.dart';
@@ -65,27 +65,30 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: SizedBox.square(
-                dimension: 64,
-                child:
-                    _isBusy ? const CircularProgressIndicator() : const Align(),
-              ),
+      body: Stack(
+        children: <Widget>[
+          Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SelectStorage(enabled: !_isBusy),
+                const Expanded(
+                  child: Padding(
+                    padding: EdgeInsets.all(16),
+                    child: ResultsTable(),
+                  ),
+                ),
+              ],
             ),
-            SelectStorage(enabled: !_isBusy),
-            const Expanded(
-              child: Padding(
-                padding: EdgeInsets.all(16),
-                child: ResultsTable(),
-              ),
+          ),
+          Center(
+            child: SizedBox.square(
+              dimension: 128,
+              child:
+                  _isBusy ? const CircularProgressIndicator() : const Align(),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _isBusy
@@ -99,11 +102,15 @@ class _MyHomePageState extends State<MyHomePage> {
                   _isBusy = true;
                 });
 
-                final StorageRepo repo = di<StorageRepo>();
+                late final StorageRepo repo;
 
                 try {
-                  final Random rand =
-                      Random(DateTime.now().microsecondsSinceEpoch);
+                  repo = di<StorageRepo>();
+
+                  await repo.init();
+
+                  final math.Random rand =
+                      math.Random(DateTime.now().microsecondsSinceEpoch);
 
                   final List<String> values = List<String>.generate(
                     _kKeysNumber,
@@ -126,10 +133,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                   searchTime.stop();
 
-                  setState(() {
-                    _isBusy = false;
-                  });
-
                   di<TableData>().addData(
                     di<Settings>().state.storage,
                     MeasurementDto(
@@ -138,8 +141,16 @@ class _MyHomePageState extends State<MyHomePage> {
                       size: await repo.dbSize(),
                     ),
                   );
+                } on Exception catch (error, stackTrace) {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Error: $error'),
+                  ));
                 } finally {
-                  repo.dispose();
+                  await repo.dispose();
+
+                  setState(() {
+                    _isBusy = false;
+                  });
                 }
               },
         autofocus: true,

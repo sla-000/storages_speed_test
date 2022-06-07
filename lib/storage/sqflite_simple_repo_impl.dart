@@ -10,8 +10,6 @@ class SqfliteSimpleRepoImpl extends SqfliteRepoImpl {
   String get kKey => 'test_simple_table';
 
   @override
-  FutureOr<void> onCreateDb(Database db, int version) async {
-    await db.execute(
-        'CREATE TABLE $kKey (id INTEGER PRIMARY KEY, key TEXT, value TEXT)');
-  }
+  FutureOr<void> onCreateDb(Database db, int version) => db.execute(
+      'CREATE TABLE $kKey (id INTEGER PRIMARY KEY, key TEXT, value TEXT)');
 }
