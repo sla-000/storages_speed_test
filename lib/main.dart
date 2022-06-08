@@ -67,19 +67,28 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Stack(
         children: <Widget>[
-          Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SelectStorage(enabled: !_isBusy),
-                const Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: ResultsTable(),
-                  ),
+          CustomScrollView(
+            physics: const BouncingScrollPhysics(),
+            slivers: <Widget>[
+              SliverList(
+                delegate: SliverChildListDelegate(
+                  <Widget>[
+                    Center(
+                      child: SizedBox(
+                        width: 350,
+                        child: SelectStorage(enabled: !_isBusy),
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Center(
+                        child: ResultsTable(),
+                      ),
+                    )
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Center(
             child: SizedBox.square(

@@ -29,6 +29,7 @@ class _SelectStorageState extends State<SelectStorage> {
     return SizedBox(
       width: 300,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           RadioSelectStorage(
             groupValue: _storageSwitch,
